@@ -31,6 +31,9 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASS}
+      - MONGO_APP_USER=${MONGO_APP_USER}
+      - MONGO_APP_PASS=${MONGO_APP_PASS}
+      - MONGO_APP_DB=${MONGO_APP_DB}
     volumes:
       - mongo_data:/data/db
       - mongo_config:/data/configdb
