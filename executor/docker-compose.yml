@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  openclaw:
+    image: openclaw/agent:latest
+    container_name: openclaw_executor
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - AI_ROUTER_URL=${AI_ROUTER_URL}
+      - BROWSER_WS_ENDPOINT=${BROWSER_WS_ENDPOINT}
+    volumes:
+      - ./openclaw_data:/app/data
+    restart: always
+
+  mcp-filesystem:
+    image: mcp/filesystem-server:latest
+    container_name: mcp_filesystem
+    volumes:
+      - /home/ec2-user/executor_architecture:/workspace:rw
+    restart: always

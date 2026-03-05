@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  browserless:
+    image: browserless/chrome:latest
+    container_name: browserless_scout
+    ports:
+      - "3000:3000"
+    environment:
+      - MAX_CONCURRENT_SESSIONS=10
+    restart: always
