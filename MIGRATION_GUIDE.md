@@ -74,10 +74,10 @@ cp /path/to/executor/docker-compose.yml .
 cp /path/to/executor/.env.example .env
 ```
 
-Edit `.env` and replace the placeholder IPs:
+Edit `.env` and replace the placeholder IPs and credentials:
 
 ```
-MONGO_URL=mongodb://<BRAIN_IP>:27017
+MONGO_URL=mongodb://<MONGO_USER>:<MONGO_PASS>@<BRAIN_IP>:27017
 AI_ROUTER_URL=http://<BRAIN_IP>:4000
 BROWSER_WS_ENDPOINT=ws://<SCOUT_IP>:3000
 ```
@@ -106,3 +106,12 @@ http://<EXECUTOR_IP>:8080
   existing chat history and memory are preserved automatically.
 - **Resource Efficiency:** AWS 1 has minimal load (database only), while AWS 2
   gets full 4 GB RAM dedicated to the AI agent.
+
+## Security Notes
+
+- MongoDB is configured with authentication. Set a strong password in
+  `brain/.env` before starting the services.
+- All server-to-server communication should go through Tailscale, which
+  provides encrypted tunnels. Do not expose ports on the public internet.
+- Consider pinning Docker image tags to specific versions in production
+  instead of using `latest` to avoid unexpected breaking changes.
