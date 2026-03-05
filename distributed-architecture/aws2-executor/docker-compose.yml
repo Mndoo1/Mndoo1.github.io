@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  openclaw:
+    image: openclaw/agent:latest
+    container_name: openclaw_executor
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - AI_ROUTER_URL=${AI_ROUTER_URL}
+      - BROWSER_WS_ENDPOINT=${BROWSER_WS_ENDPOINT}
+      - LITELLM_API_KEY=${LITELLM_API_KEY}
+    volumes:
+      - openclaw_data:/app/data
+    networks:
+      - executor_net
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+
+  mcp-filesystem:
+    image: mcp/filesystem-server:latest
+    container_name: mcp_filesystem
+    volumes:
+      - workspace_data:/workspace:rw
+    networks:
+      - executor_net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.50"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+
+networks:
+  executor_net:
+    driver: bridge
+
+volumes:
+  openclaw_data:
+  workspace_data:
