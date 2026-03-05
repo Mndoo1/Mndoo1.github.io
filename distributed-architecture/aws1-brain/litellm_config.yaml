@@ -1,0 +1,31 @@
+model_list:
+  - model_name: groq-llama
+    litellm_params:
+      model: groq/llama-3.1-70b-versatile
+      api_key: os.environ/GROQ_API_KEY
+  - model_name: cerebras-llama
+    litellm_params:
+      model: cerebras/llama3.1-70b
+      api_key: os.environ/CEREBRAS_API_KEY
+  - model_name: nvidia-nemotron
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-4-340b-instruct
+      api_key: os.environ/NVIDIA_API_KEY
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+  max_budget: 50.0
+  budget_duration: 30d
+  num_retries: 2
+  request_timeout: 120
+  allowed_fails: 3
+
+router_settings:
+  routing_strategy: least-busy
+  num_retries: 2
+  timeout: 120
+  allowed_fails: 3

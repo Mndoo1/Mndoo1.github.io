@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  browserless:
+    image: browserless/chrome:2.18.0
+    container_name: browserless_scout
+    ports:
+      - "3000:3000"
+    environment:
+      - MAX_CONCURRENT_SESSIONS=5
+      - CONNECTION_TIMEOUT=60000
+      - MAX_QUEUE_LENGTH=10
+      - TOKEN=${BROWSERLESS_TOKEN}
+      - ENABLE_DEBUGGER=false
+      - DISABLED_FEATURES=["download"]
+      - DEFAULT_BLOCK_ADS=true
+      - FUNCTION_ENABLE_INCOGNITO_MODE=true
+      - EXIT_ON_HEALTH_FAILURE=true
+      - PREBOOT_CHROME=true
+    networks:
+      - scout_net
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "1.5"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/pressure"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+
+networks:
+  scout_net:
+    driver: bridge
